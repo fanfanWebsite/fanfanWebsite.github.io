@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link id="link" rel="stylesheet" href="./mtr.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .main {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-around;
+        }
+
+        .box {
+            box-sizing: border-box;
+            border: 4px solid white;
+            overflow: hidden;
+            text-align: center;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all .6s;
+        }
+
+        .box:hover {
+            transform: scale(1.1);
+            box-shadow: 0 1px 6px rgba(0,0,0,0.2)
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main" class="main"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    let w = document.body.clientWidth;
+    let h = document.body.clientHeight;
+    let originStr = document.styleSheets[0].cssRules[0].cssText;
+    let cssStr = '';
+    let reg = /\{(.*)\}/g;
+    originStr.replace(reg, function ($1, $2) {
+        cssStr = $2;
+    });
+    let cssArr = cssStr.split(';');
+    let a,b;
+    if (w / h > 1) {
+     a = w / 10;
+     b = h / 9;
+    } else {
+      a = w / 5;
+      b = h / 18;
+    }
+    console.log(w,h)
+    cssArr.forEach(item => {
+        let node = document.createElement("div");
+        node.style.width = a.toFixed() + 'px';
+        node.style.height = b.toFixed() + 'px';
+        node.style.background = item.split(':')[1];
+        node.className = 'box';
+        if ( w / h > 1) {
+            node.innerHTML = item.split(':')[0];
+        } else {
+            node.innerHTML = item.split(':')[1];
+        }
+        node.setAttribute('data-clipboard-text', item.split(':')[1]);
+        main.appendChild(node);
+    })
+
+    let clipboard = new ClipboardJS('[data-clipboard-text]');
+    clipboard.on('success', function() {
+        alert('复制成功！');
+    });
+</script>
+
+</html>
