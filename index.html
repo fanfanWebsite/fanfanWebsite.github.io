@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -87,7 +86,7 @@
         } else {
             node.innerHTML = item.split(':')[1];
         }
-        node.setAttribute('data-clipboard-text', item.split(':')[1].trim());
+        node.setAttribute('data-clipboard-text', item.split(':')[1] ? (item.split(':')[1]).trim() : null);
         main.appendChild(node);
     })
 
