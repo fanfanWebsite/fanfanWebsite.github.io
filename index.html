@@ -87,7 +87,7 @@
         } else {
             node.innerHTML = item.split(':')[1];
         }
-        node.setAttribute('data-clipboard-text', item.split(':')[1]);
+        node.setAttribute('data-clipboard-text', item.split(':')[1].trim());
         main.appendChild(node);
     })
 
