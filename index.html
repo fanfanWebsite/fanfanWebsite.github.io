@@ -68,43 +68,56 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
 <script>
-    let w = document.body.clientWidth;
-    let h = document.body.clientHeight;
-    let originStr = document.styleSheets[0].cssRules[0].cssText;
-    let cssStr = '';
-    let reg = /\{(.*)\}/g;
-    originStr.replace(reg, function ($1, $2) {
-        cssStr = $2;
-    });
-    let cssArr = cssStr.split(';');
-    let a,b;
-    if (w / h > 1) {
-     a = w / 10;
-     b = h / 9;
-    } else {
-      a = w / 5;
-      b = h / 18;
-    }
-    console.log(w,h)
-    cssArr.forEach(item => {
-        let node = document.createElement("div");
-        node.style.width = a.toFixed() + 'px';
-        node.style.height = b.toFixed() + 'px';
-        node.style.background = item.split(':')[1];
-        node.className = 'box';
-        if ( w / h > 1) {
-            node.innerHTML = item.split(':')[0];
-        } else {
-            node.innerHTML = item.split(':')[1];
-        }
-        node.setAttribute('data-clipboard-text', item.split(':')[1] ? (item.split(':')[1]).trim() : null);
-        main.appendChild(node);
-    })
-
     let clipboard = new ClipboardJS('[data-clipboard-text]');
     clipboard.on('success', function() {
         alert('复制成功！');
     });
-</script>
 
+    function drawPic() {
+        main.innerHTML = '';
+        let w = document.body.clientWidth;
+        let h = document.body.clientHeight;
+        let originStr = document.styleSheets[0].cssRules[0].cssText;
+        let cssStr = '';
+        let reg = /\{(.*)\}/g;
+        originStr.replace(reg, function ($1, $2) {
+            cssStr = $2;
+        });
+        let cssArr = cssStr.trim().split(';');
+        let a,b;
+        if (w / h > 1) {
+            a = w / 10;
+            b = h / 9;
+        } else {
+            a = w / 5;
+            b = h / 18;
+        }
+
+        cssArr.forEach(item => {
+            if (item) {
+                let node = document.createElement("div");
+                node.style.width = Math.floor(a) + 'px';
+                node.style.height = Math.floor(b)+ 'px';
+                node.style.background = item.split(':')[1];
+                node.className = 'box';
+                if ( w / h > 1) {
+                    node.innerHTML = item.split(':')[0];
+                } else {
+                    node.innerHTML = item.split(':')[1];
+                }
+                node.setAttribute('data-clipboard-text', item.split(':')[1] ? (item.split(':')[1]).trim() : null);
+                main.appendChild(node);
+            }
+
+        });
+
+    }
+</script>
+<script>
+    drawPic();
+    window.addEventListener('resize', function() {
+        console.log(111)
+        drawPic();
+    })
+</script>
 </html>
